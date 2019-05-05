@@ -35,11 +35,11 @@ LOG_FILE = "mySpider.log"
 #     'password': '12345678'
 #     }
 
-REDIS = {
- #   'url': None,
-    'host': '172.181.217.58',
-    'port': 6379,
-    }
+# REDIS = {
+#  #   'url': None,
+#     'host': '172.181.217.58',
+#     'port': 6379,
+#     }
 
 MONGODB = {
     'url': 'mongodb://47.105.103.8:27017/',
@@ -73,7 +73,7 @@ RETRY_HTTP_CODES = [500, 502] # default is  [500, 502, 503, 504, 408]
 HANDLE_PROXY_ERROR_CODES = [400, 401, 403, 407, 408, 503, 504]
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 10
+CONCURRENT_REQUESTS = 6
 
 REDIRECT_ENALBED = False
 
@@ -108,7 +108,7 @@ DOWNLOAD_DELAY = 0.5
 DOWNLOADER_MIDDLEWARES = {
    # 'sjjy.middlewares.SjjyDownloaderMiddleware': 543,
     'sjjy.middlewares.UserAgentMiddleware': 401,
-   # 'sjjy.middlewares.CookiesMiddleware': 402,
+    'sjjy.middlewares.CookiesMiddleware': 402,
     'sjjy.middlewares.ProxyMiddleware': 450,
     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
 }

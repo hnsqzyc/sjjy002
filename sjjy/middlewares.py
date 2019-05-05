@@ -157,6 +157,20 @@ class ProxyMiddleware(object):
                 # 重新提交请求
                 return self.resumit_request(request)
 
+            # elif 'zchykj_f_bp' or 'yzphykj_f_bp' in response.text:
+            #     print('Cookie 失效, 待更新....')
+            #     if spider.remote_resource:
+            #         # 记录失效的资源
+            #         spider.redis_conn.lpush(spider.settings['INVALID_BXS_RESOURCE_POOL_CK'],
+            #                                 request.meta['resource_cookie'])
+            #
+            #         # 从资源池移除失效的资源（如果资源已经放回资源池的时候才使用）
+            #         logging.warning('发现Cookie异常，删除失效资源：%s' % request.meta['resource_cookie'])
+            #         spider.redis_conn.lrem(spider.settings['BXS_RESOURCE_POOL_CK'], 0, request.meta['resource_cookie'])
+            #
+            #     # 重新提交请求
+            #     return self.resumit_request(request)
+
 
             elif not response.body:
                 logging.warning('Response is empty, cookie id is: %s, re-submitting request' % request.meta['resource'][
@@ -168,7 +182,7 @@ class ProxyMiddleware(object):
 
                 # 从资源池移除失效的资源（如果资源已经放回资源池的时候才使用）
                 logging.info('发现返回异常，删除可能失效的资源：%s' % request.meta['resource_str'])
-                spider.redis_conn.lrem(spider.settings['BXS_RESOURCE_POOL'], request.meta['resource_str'], 0)
+                spider.redis_conn.lrem(spider.settings['BXS_RESOURCE_POOL'], 0, request.meta['resource_str'])
 
                 return self.resumit_request(request)
 

@@ -95,7 +95,7 @@ class JjySpider(scrapy.Spider):
         realUid = meta['realUid']
         # print('response_photo_num', response.text)
         try:
-            res_img = response.xpath('//ul[@class="nav_l"]//li[2]/a/text()')[0]
+            res_img = response.xpath('//ul[@class="nav_l"]//li[2]/a/text()').extract()[0]
 
 
             img_num = re.search(r'照片\((\d+?)\)', str(res_img)).group(1)
@@ -103,7 +103,7 @@ class JjySpider(scrapy.Spider):
             logging.info('realUid: %s' % (realUid,))
 
             # TODO 插入照片数量
-            # self.sjjy.update({'realUid': realUid}, {'$set': {'photo_num': int(img_num)}})
+            self.sjjy.update({'realUid': realUid}, {'$set': {'photo_num': int(img_num)}}) # 更新照片数量 0505
             if int(img_num) > 4:
                 # 如果照片数量不小于5张, 遍历存储
                 img_link = response.xpath('//div[@id="bigImg"]/ul/li//img/@_src').extract()
@@ -113,20 +113,20 @@ class JjySpider(scrapy.Spider):
                     meta['img_url'] = img_url
                     meta['img_id'] = re.search(r'(.*?).jpg', img_url).group(1)[-8:]
                     logging.info('img_url %s' % img_url)
-                    print('img_url', img_url)
+                    # print('img_url', img_url)
                     img_li.append(img_url)
                 logging.info('正在下载图片链接...')
                 res = self.sjjy.update({'realUid': realUid}, {'$addToSet': {'img_url_li': img_li}})
-                logging.info('下载图片链接后修改Uid状态为1...')
+                logging.info('下载图片链接后修改Uid状态为7...')
                # result = self.sjjy.update({'realUid': realUid}, {'$set': {'status': 1}})
 
             else:
 
-                logging.info('图片数量小于4修改Uid状态为1...')
+                logging.info('图片数量小于4修改Uid状态为7...')
                # result = self.sjjy.update({'realUid': realUid}, {'$set': {'status': 1}})
 
         except (IndexError, AttributeError) as f:
-            print('下载图片链接后修改Uid状态为1...')
+            print('下载图片链接后修改Uid状态为7...')
            # result = self.sjjy.update({'realUid': realUid}, {'$set': {'status': 1}})
             self.sjjy.update({'realUid': realUid}, {'$set': {'photo_num': 900}})
             print('img_num', realUid, f, '空值...')
