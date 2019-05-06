@@ -61,7 +61,8 @@ class JjySpider(scrapy.Spider):
 
     def start_requests(self):
         while 1: # 可能造成重复
-            result = self.sjjy.find({'status': 8}, {'_id': 0, 'realUid': 1}).limit(100)
+            #result = self.sjjy.find({'status': 8}, {'_id': 0, 'realUid': 1}).limit(100)
+            result = self.sjjy.find({'status':7, 'photo_num':{'$gte':5, '$ne': 900},'img_url_li':[]}, {'_id': 0, 'realUid': 1}).limit(100)
             if result.count():
                 for res in result:
                     meta = {}
